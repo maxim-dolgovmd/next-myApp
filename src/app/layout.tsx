@@ -1,6 +1,15 @@
+import '../styles/global.css'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
-import './globals.css'
+import Navbar from '@/components/navbar/navbar'
+import Footer from '@/components/footer/footer'
+import StyledComponentsRegistry from '@/app/registry'
+import ContainerContent from '@/components/container/containerContent'
+import ContainerBody from '@/components/container/containerBody'
+import { ThemeProviderMode } from '@/context/ThemeContext'
+import { ThemeProvider } from 'styled-components'
+import { Providers } from '@/redux/provider'
+import AuthProvider from '@/components/authProvider/authProvider'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -16,7 +25,21 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <StyledComponentsRegistry>
+        <body className={inter.className}>
+          <Providers>
+            <ThemeProviderMode>
+              <AuthProvider>
+                <ContainerBody>
+                  <Navbar />
+                  {children}
+                  <Footer />
+                </ContainerBody>
+              </AuthProvider>
+            </ThemeProviderMode>
+          </Providers>
+        </body>
+      </StyledComponentsRegistry>
     </html>
   )
 }
